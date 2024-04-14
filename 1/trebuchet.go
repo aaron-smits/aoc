@@ -36,10 +36,6 @@ import (
 
 // Consider your entire calibration document. What is the sum of all of the calibration values?
 
-// To play, please identify yourself via one of these services:
-
-// input
-
 // go:embed input.txt
 var input string
 
