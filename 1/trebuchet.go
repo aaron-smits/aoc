@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 // --- Day 1: Trebuchet?! ---
@@ -36,11 +37,8 @@ import (
 
 // Consider your entire calibration document. What is the sum of all of the calibration values?
 
-// go:embed input.txt
-var input string
-
-
 func main() {
+	startTime := time.Now()
 	var sum int
 	readFile, err := os.Open("input.txt")
 	if err != nil {
@@ -55,6 +53,7 @@ func main() {
 		sum += getCode(fileScanner.Text())
 	}
 	fmt.Println(sum)
+	fmt.Println(time.Since(startTime))
 }
 
 func getCode(line string) (int){
@@ -65,11 +64,9 @@ func getCode(line string) (int){
 		}
 	}
 	var lineCode []rune 
+	
 	lineCode = append(lineCode, numbers[0], numbers[len(numbers)-1])
 	
-	codeInt, err := strconv.Atoi(string(lineCode))
-	if err != nil {
-		panic(err)
-	}
+	codeInt, _ := strconv.Atoi(string(lineCode))
 	return codeInt
 }
