@@ -4,7 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
+	"strings"
+
+	// "sort"
+	// "strconv"
+	// "strings"
 	"time"
 )
 
@@ -46,9 +52,7 @@ func main() {
 	}
 	defer readFile.Close()
 	fileScanner := bufio.NewScanner(readFile)
-
 	fileScanner.Split(bufio.ScanLines)
-
 	for fileScanner.Scan() {
 		sum += getCode(fileScanner.Text())
 	}
@@ -57,16 +61,39 @@ func main() {
 }
 
 func getCode(line string) (int){
-	var numbers []rune
-	for _, b := range([]rune(line)) {
-		if _, err := strconv.Atoi(string(b)); err == nil {
-			numbers = append(numbers, b)
-		}
+	matches := make(map[int]string)
+	substrings := []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
+	substrings2 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+	findSubstrings(line, substrings, matches)
+	findSubstrings(line, substrings2, matches)
+	var keys []int
+	for k := range matches {
+		keys = append(keys, k)
 	}
-	var lineCode []rune 
-	
-	lineCode = append(lineCode, numbers[0], numbers[len(numbers)-1])
-	
-	codeInt, _ := strconv.Atoi(string(lineCode))
-	return codeInt
+	slices.Sort(keys)
+	code, _ := strconv.Atoi(matches[keys[0]] + matches[keys[len(keys)-1]])
+	return code
 }
+
+func findSubstrings (line string, substrings []string, matches map[int]string) {
+	for i, str := range substrings {
+        start := 0
+        for {
+            index := strings.Index(line[start:], str)
+            if index == -1 {
+                break
+            }
+            matches[index+start] = fmt.Sprint(i + 1)
+            index += start
+            start = index + len(str)
+        }
+    }
+}
+
+// 	for i := 0; i < len(str); i++ {
+// 		if str[i:i+len(substring)] == substring {
+// 		   return i
+// 		}
+// 	 }
+// 	 return -1
+// }
